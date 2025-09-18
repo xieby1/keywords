@@ -5,6 +5,10 @@ use clap::Parser;
 #[derive(Parser)]
 struct Cli {
     file: std::path::PathBuf,
+    #[arg(short, long, default_value_t=3)]
+    ngrams: usize,
+    #[arg(short, long, default_value_t=5)]
+    minimum_chars: usize,
 }
 
 fn main() {
@@ -14,8 +18,8 @@ fn main() {
     for page in file.pages() { text.push_str(&page.get_text().unwrap_or("")); }
 
     let config = Config {
-        ngrams: 3,
-        minimum_chars: 5,
+        ngrams: cli.ngrams,
+        minimum_chars: cli.minimum_chars,
         only_alphanumeric_and_hyphen: true,
         ..Config::default()
     };
