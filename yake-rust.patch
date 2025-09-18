@@ -1,0 +1,20 @@
+diff --git a/yake_rust/src/lib.rs b/yake_rust/src/lib.rs
+index 523a60c..ac64780 100644
+--- a/yake_rust/src/lib.rs
++++ b/yake_rust/src/lib.rs
+@@ -418,7 +418,7 @@ impl Yake {
+             // the last word is a stopword
+             || self.is_stopword(lc_terms.last().unwrap())
+             // not enough symbols in total
+-            || lc_terms.iter().map(|w| w.chars().count()).sum::<usize>() < self.config.minimum_chars
++            || lc_terms.iter().any(|w| w.chars().count() < self.config.minimum_chars)
+             // has non-alphanumeric characters
+             || self.config.only_alphanumeric_and_hyphen && !lc_terms.iter().all(word_is_alphanumeric_and_hyphen);
+ 
+@@ -464,5 +464,5 @@ impl Yake {
+ }
+ 
+ fn word_is_alphanumeric_and_hyphen(word: impl AsRef<str>) -> bool {
+-    word.as_ref().chars().all(|ch| ch.is_alphanumeric() || ch == '-')
++    word.as_ref().chars().all(|ch| ch.is_ascii_alphanumeric() || ch == '-')
+ }

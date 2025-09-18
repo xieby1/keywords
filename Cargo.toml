@@ -1,0 +1,8 @@
+[package]
+name = "words"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+yake-rust = { path = "yake-rust/yake_rust" }
+poppler = "0.6.0"
