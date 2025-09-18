@@ -33,7 +33,7 @@ in pkgs.rustPlatform.buildRustPackage rec {
     '';
   in /*bash*/ ''
     [[ -e yake-rust ]] || ln -s ${yake-rust} yake-rust
-    [[ -e ./src/stopwords.txt ]] || ln -s ${stopwords} ./src/stopwords.txt
+    [[ -e ./src/stopwords.txt ]] || cp -f ${stopwords} ./src/stopwords.txt
   '';
   shellHook = preBuild;
 }
