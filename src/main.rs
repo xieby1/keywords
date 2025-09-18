@@ -1,15 +1,15 @@
 use yake_rust::{get_fn_best, Config, StopWords};
 use poppler;
+use clap::Parser;
+
+#[derive(Parser)]
+struct Cli {
+    file: std::path::PathBuf,
+}
 
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    if args.len() < 2 {
-        eprintln!("Usage: {} <filename> [n_keywords]", args[0]);
-        std::process::exit(1);
-    }
-    let filename = &args[1];
-
-    let file: poppler::PopplerDocument = poppler::PopplerDocument::new_from_file(filename, None)
+    let cli = Cli::parse();
+    let file: poppler::PopplerDocument = poppler::PopplerDocument::new_from_file(cli.file, None)
         .expect("Failed to open PDF file");
     let mut text = String::new();
     for page in file.pages() {
