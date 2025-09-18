@@ -1,3 +1,12 @@
+From e7642f67f905cb7866964eb9832a280e20a1322f Mon Sep 17 00:00:00 2001
+From: xieby1 <xieby1@outlook.com>
+Date: Thu, 18 Sep 2025 22:28:04 +0800
+Subject: [PATCH 1/2] count ascii
+
+---
+ yake_rust/src/lib.rs | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
 diff --git a/yake_rust/src/lib.rs b/yake_rust/src/lib.rs
 index 523a60c..ac64780 100644
 --- a/yake_rust/src/lib.rs
@@ -18,3 +27,6 @@ index 523a60c..ac64780 100644
 -    word.as_ref().chars().all(|ch| ch.is_alphanumeric() || ch == '-')
 +    word.as_ref().chars().all(|ch| ch.is_ascii_alphanumeric() || ch == '-')
  }
+-- 
+2.49.0
+

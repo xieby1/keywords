@@ -16,9 +16,10 @@ in pkgs.rustPlatform.buildRustPackage rec {
       owner = "quesurifn";
       repo = "yake-rust";
       rev = "92cee51b1d6f13cbab388a9c89accabb282d99e9";
-      hash = "sha256-6da5HIQ2D/vfbQUE2RrrK5Eo7DBDxEuM4HrTIoNA2/s=";
+      hash = "sha256-fMy3RoZiMkrywTWsw5eVd6yU/atZWuaP3kwyhwPPXDI=";
       postFetch = /*bash*/ ''
-        patch -p1 -d $out < ${./yake-rust.patch}
+        patch -p1 -d $out < ${./0001-count-ascii.patch}
+        patch -p1 -d $out < ${./0002-get_fn_best.patch}
       '';
     };
     stopwords = pkgs.runCommand "stopwords" {

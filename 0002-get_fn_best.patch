@@ -1,0 +1,59 @@
+From 373debb3be46cac352f6d6c7e572cdc63b0e3c8c Mon Sep 17 00:00:00 2001
+From: xieby1 <xieby1@outlook.com>
+Date: Thu, 18 Sep 2025 22:28:39 +0800
+Subject: [PATCH 2/2] get_fn_best
+
+---
+ yake_rust/src/lib.rs   | 11 ++++++-----
+ yake_rust/src/tests.rs |  2 +-
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/yake_rust/src/lib.rs b/yake_rust/src/lib.rs
+index ac64780..fe64513 100644
+--- a/yake_rust/src/lib.rs
++++ b/yake_rust/src/lib.rs
+@@ -161,11 +161,11 @@ impl Default for Config {
+     }
+ }
+ 
+-/// Extract the top N most important key phrases from the text.
++/// Extract the top fn(#vocabulary) most important key phrases from the text.
+ ///
+-/// If you need all the keywords, pass [`usize::MAX`].
+-pub fn get_n_best(n: usize, text: &str, stop_words: &StopWords, config: &Config) -> Vec<ResultItem> {
+-    Yake::new(stop_words.clone(), config.clone()).get_n_best(text, n)
++/// If you need all the keywords, pass [`||usize::MAX`].
++pub fn get_fn_best(f: fn(usize)->usize, text: &str, stop_words: &StopWords, config: &Config) -> Vec<ResultItem> {
++    Yake::new(stop_words.clone(), config.clone()).get_fn_best(text, f)
+ }
+ 
+ #[derive(Debug, Clone)]
+@@ -179,10 +179,11 @@ impl Yake {
+         Self { config, stop_words }
+     }
+ 
+-    fn get_n_best(&self, text: &str, n: usize) -> Vec<ResultItem> {
++    fn get_fn_best(&self, text: &str, f: fn(usize)->usize) -> Vec<ResultItem> {
+         let sentences = self.preprocess_text(text);
+ 
+         let (context, vocabulary) = self.build_context_and_vocabulary(&sentences);
++        let n = f(vocabulary.len());
+         let features = self.extract_features(&context, vocabulary, &sentences);
+ 
+         let mut ngrams: Candidates = self.ngram_selection(self.config.ngrams, &sentences);
+diff --git a/yake_rust/src/tests.rs b/yake_rust/src/tests.rs
+index d67b601..bb7c219 100644
+--- a/yake_rust/src/tests.rs
++++ b/yake_rust/src/tests.rs
+@@ -4,7 +4,7 @@ use super::*;
+ 
+ fn test<const T: usize>(text: &str, lang: &str, cfg: Config, n_best: usize, expected: [(&str, &str, f64); T]) {
+     let stopwords = StopWords::predefined(lang).unwrap();
+-    let mut actual = Yake::new(stopwords, cfg).get_n_best(text, n_best);
++    let mut actual = Yake::new(stopwords, cfg).get_fn_best(text, ||n_best);
+     // leave only 4 digits
+     actual.iter_mut().for_each(|r| r.score = (r.score * 10_000.).round() / 10_000.);
+     assert_eq!(actual, expected);
+-- 
+2.49.0
+

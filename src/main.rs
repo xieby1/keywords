@@ -1,4 +1,4 @@
-use yake_rust::{get_n_best, Config, StopWords};
+use yake_rust::{get_fn_best, Config, StopWords};
 use poppler;
 
 fn main() {
@@ -8,11 +8,6 @@ fn main() {
         std::process::exit(1);
     }
     let filename = &args[1];
-    let n_keywords: usize = if args.len() >= 3 {
-        args[2].parse().expect("n_keywords must be a positive integer")
-    } else {
-        10
-    };
 
     let file: poppler::PopplerDocument = poppler::PopplerDocument::new_from_file(filename, None)
         .expect("Failed to open PDF file");
@@ -33,7 +28,12 @@ fn main() {
     let ignored = StopWords::custom(
         include_str!("./stopwords.txt").lines().map(ToOwned::to_owned).collect()
     );
-    let keywords = get_n_best(n_keywords, &text, &ignored, &config);
+    // TODO: replace `n_keywords` with a ratio of number of words in text
+    // <50->0, 100->4, 1k->6, 10k->8
+    let keywords = get_fn_best(
+        |n|{if n<50 {0} else {(f64::log10(n as f64)*2.0) as usize} },
+        &text, &ignored, &config
+    );
 
     println!("{:#?}", keywords);
 }
