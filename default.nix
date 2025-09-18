@@ -1,9 +1,9 @@
 let
   pkgs = import <nixpkgs> {};
 in pkgs.rustPlatform.buildRustPackage rec {
-  name = "words";
+  name = "keywords";
   src = ./.;
-  cargoHash = "sha256-qdn68JAE4zEj9V49GMs9TNO1i2/hVNpvDNdFmiJmzcU=";
+  cargoHash = "sha256-op2bzNF5EWCzTykwANeWT3WDaadpknPvaLAq46Y88yA=";
   nativeBuildInputs = [
     pkgs.pkg-config
   ];
