@@ -30,7 +30,9 @@ fn main() {
         only_alphanumeric_and_hyphen: true,
         ..Config::default()
     };
-    let ignored = StopWords::predefined("en").unwrap();
+    let ignored = StopWords::custom(
+        include_str!("./stopwords.txt").lines().map(ToOwned::to_owned).collect()
+    );
     let keywords = get_n_best(n_keywords, &text, &ignored, &config);
 
     println!("{:#?}", keywords);
